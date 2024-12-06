@@ -60,4 +60,9 @@ public class Agenda {
         return null;
     }
 
+    public void printContactList() {
+        for (Contact contact : getListaContacte()) {
+            System.out.println(contact);
+        }
+    }
 }

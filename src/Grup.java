@@ -28,4 +28,9 @@ public class Grup {
         contacte.remove(contact);
     }
 
+    public void printContacts() {
+        for (Contact contact : getContacte()) {
+            System.out.println(contact);
+        }
+    }
 }
