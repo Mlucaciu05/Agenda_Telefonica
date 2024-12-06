@@ -33,12 +33,21 @@ public class Agenda {
 
     public ArrayList<Contact> searchContactNume(String nume) {
         ArrayList<Contact> contactList = new ArrayList<>();
+        nume = nume.toLowerCase();
+
         for (Contact contact : getListaContacte()) {
-            if (contact.getNume().equals(nume)) {
+            String numeIntreg = contact.getNume() + " " + contact.getPrenume();
+            numeIntreg = numeIntreg.toLowerCase();
+
+            if (numeIntreg.contains(nume) || contact.getPrenume().toLowerCase().equals(nume) || contact.getNume().toLowerCase().equals(nume)) {
                 contactList.add(contact);
             }
         }
-        return contactList;
+        if(contactList.size() == 0){
+            return null;
+        } else {
+            return contactList;
+        }
     }
 
     public ArrayList<Contact> searchContactNrTelefon(String nrTel) {
@@ -48,7 +57,11 @@ public class Agenda {
                 contactList.add(contact);
             }
         }
-        return contactList;
+        if(contactList.size() == 0){
+            return null;
+        } else {
+            return contactList;
+        }
     }
 
     public ArrayList<Contact> searchContactGrup(String numeGrup) {
