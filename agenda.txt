@@ -1,0 +1,4 @@
+Ana,Maria,0712345678,anamaria@email.com
+Matei,Matei,0765432190,mateimatei@email.com
+Dana,Ana,1234567890,danaana@email.com
+Amadeus,Mozart,0999999999,amadeusmozart@email.com

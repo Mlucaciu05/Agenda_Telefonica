@@ -1,9 +1,36 @@
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.LineNumberReader;
 import java.util.ArrayList;
 
 public class UserManager {
-    ArrayList<User> users;
+    private static String FILENAME = "users.txt";
+    private static User currentUser = null;
+    private ArrayList<User> users;
 
-    public UserManager() {}
+    public UserManager() {
+        users = new ArrayList<>();
+        try {
+            FileReader fr = new FileReader(FILENAME);
+            LineNumberReader lnr = new LineNumberReader(fr);
+
+            while (lnr.ready()) {
+                String line = lnr.readLine();
+                String[] parts = line.split(",");
+                users.add(new User(parts[0], parts[1], new Agenda()));
+            }
+
+            lnr.close();
+            fr.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
 
     public void addUser(User user){
         users.add(user);
@@ -22,15 +49,28 @@ public class UserManager {
         return null;
     }
 
-    public User login(String username, String password){
+    public boolean login(String username, String password){
         for(User user : users){
-            if(user.getUsername().equals(username)){
-                if(user.getPassword().equals(password)){
-                    return user;
-                }
+            if(user.getUsername().equals(username) && user.getPassword().equals(password)){
+                currentUser = user;
+                return true;
             }
         }
-        return null;
+        return false;
+    }
+
+    public void register(String username, String password){
+        try {
+            FileWriter fw = new FileWriter(FILENAME, true);
+            System.out.println(username + " " + password);
+            fw.write(username + "," + password + "\n");
+
+            fw.close();
+
+            users.add(new User(username, password, new Agenda()));
+        } catch(Exception e){
+            System.out.println(e);
+        }
     }
 
 }

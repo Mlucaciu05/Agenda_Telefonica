@@ -1,11 +1,33 @@
 import javax.swing.*;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.LineNumberReader;
 import java.util.ArrayList;
 
 public class Agenda {
+    private static String FILENAME = "agenda.txt";
     private ArrayList<Contact> listaContacte;
     private ArrayList<Grup> listaGrup;
+    private Grup contacteFavorite;
 
-    public Agenda() {}
+    public Agenda() {
+        try {
+            FileReader fr = new FileReader(FILENAME);
+            LineNumberReader lnr = new LineNumberReader(fr);
+            listaContacte = new ArrayList<>();
+
+            while(lnr.ready()) {
+                String line = lnr.readLine();
+                String[] parts = line.split(",");
+                listaContacte.add(new Contact(parts[0], parts[1], parts[2], parts[3]));
+            }
+
+            lnr.close();
+            fr.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public ArrayList<Contact> getListaContacte() {
         return listaContacte;
@@ -17,10 +39,12 @@ public class Agenda {
 
     public void addContact(Contact contact) {
         listaContacte.add(contact);
+        updateContacts();
     }
 
     public void removeContact(Contact contact) {
         listaContacte.remove(contact);
+        updateContacts();
     }
 
     public void addGrup(Grup grup) {
@@ -43,7 +67,7 @@ public class Agenda {
                 contactList.add(contact);
             }
         }
-        if(contactList.size() == 0){
+        if(contactList.isEmpty()){
             return null;
         } else {
             return contactList;
@@ -57,7 +81,7 @@ public class Agenda {
                 contactList.add(contact);
             }
         }
-        if(contactList.size() == 0){
+        if(contactList.isEmpty()){
             return null;
         } else {
             return contactList;
@@ -76,6 +100,18 @@ public class Agenda {
     public void printContactList() {
         for (Contact contact : getListaContacte()) {
             System.out.println(contact);
+        }
+    }
+
+    public void updateContacts(){
+        try {
+            FileWriter fw = new FileWriter(FILENAME);
+            for(Contact contact : getListaContacte()){
+                fw.write(contact.getNume() + "," + contact.getPrenume() + "," + contact.getNumarTelefon() + "," + contact.getEmail() + "\n");
+            }
+            fw.close();
+        } catch (Exception e){
+            e.printStackTrace();
         }
     }
 }

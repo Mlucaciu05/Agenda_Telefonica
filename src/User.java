@@ -1,7 +1,7 @@
 public class User {
-    String username;
-    String password;
-    Agenda agenda;
+    private String username;
+    private String password;
+    private Agenda agenda;
 
     public User(String nume, String password, Agenda agenda) {
         this.username = nume;
