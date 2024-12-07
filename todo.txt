@@ -1,0 +1,15 @@
+lucruri de facut (in versiunea asta, adica fara legatura cu baza de date, gui sau api, as spune ca e alpha):
+
+- admin user + ce privilegii are (done)
+- restul de functionalitati (grupuri, operatii cu ele)
+- hashing passwords pentru securitate in plus
+- brainstorming de functionalitati extra (in caz in care cred ca nu am destule)
+- exceptii, verificari si constrangeri (exemplu: nr de telefon sa aiba 10 caractere, aruncat exceptii in cazul in care se introduce un contact care este deja prezent)
+- adaugat comentarii la tot!!!!!!!!!!
+
+in urmatoarele versiuni:
+
+- implementat legatura cu o baza de date + diferentierea intre users (deocamdata, toti user-ii au aceeasi agenda)
+- implementat gui
+- implementat api pentru a scrie mesaje pe numarul de telefon al unui contact (+ poate api pentru a scrie mesaje pe email)
+- alte idei daca imi mai vin pana atunci

@@ -1,11 +1,10 @@
-import javax.swing.*;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
 
 public class Agenda {
-    private static String FILENAME = "agenda.txt";
+    private static final String FILENAME = "agenda.txt";
     private ArrayList<Contact> listaContacte;
     private ArrayList<Grup> listaGrup;
     private Grup contacteFavorite;
