@@ -79,6 +79,7 @@ public class UserManager {
 
     public void printUsers(){
         for(User user : users){
+            //also sort this one
             System.out.println(user);
         }
     }

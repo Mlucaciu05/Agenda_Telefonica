@@ -7,13 +7,15 @@ public class Agenda {
     private static final String FILENAME = "agenda.txt";
     private ArrayList<Contact> listaContacte;
     private ArrayList<Grup> listaGrup;
-    private Grup contacteFavorite;
 
     public Agenda() {
         try {
             FileReader fr = new FileReader(FILENAME);
             LineNumberReader lnr = new LineNumberReader(fr);
             listaContacte = new ArrayList<>();
+
+            listaGrup = new ArrayList<>();
+            listaGrup.add(new Grup("Favorite"));
 
             while(lnr.ready()) {
                 String line = lnr.readLine();
@@ -98,6 +100,7 @@ public class Agenda {
 
     public void printContactList() {
         for (Contact contact : getListaContacte()) {
+            //d not forget to sort this shit
             System.out.println(contact);
         }
     }

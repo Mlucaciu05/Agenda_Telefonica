@@ -33,11 +33,15 @@ public class Main {
     }
 
     public static void Meniu(User currentUser) {
+        String nume;
+        Scanner scanner = new Scanner(System.in);
+        Integer k=1;
+        String n;
 
         while(true) {
-            String nume;
-            System.out.println("---Meniu---\n1.Vizualizati toate contactele\n2.Introduceti un contact nou\n3.Stergeti un contact\n0.Iesire");
-            Scanner scanner = new Scanner(System.in);
+            System.out.println("---Meniu---\n1.Vizualizati toate contactele\n2.Introduceti un contact nou\n3.Stergeti un contact" +
+                    "\n4.Vizualizati toate grupurile si contactele din ele\n5.Adaugati un contact intr-un grup" +
+                    "\n6.Stergeti un contact dintr-un grup\n7.Adaugati un grup nou\n8.Stergeti un grup\n0.Iesire");
 
             if(currentUser.isAdmin()) {
                 System.out.println("ADMIN. Vizualizati operatiile de admin");
@@ -76,8 +80,70 @@ public class Main {
                     for (int i = 0; i < contacteGasite.size(); i++) {
                         System.out.println(i+1 + "." + contacteGasite.get(i).toString());
                     }
-                    String n = scanner.nextLine();
+                    n = scanner.nextLine();
                     currentUser.getAgenda().removeContact(contacteGasite.get(Integer.parseInt(n) - 1));
+                    break;
+
+                case "4":
+                    k=1;
+                    for(Grup grup : currentUser.getAgenda().getListaGrup()){
+                        System.out.println(k+"."+grup.getNumeGrup());
+                        grup.printContacts();
+                        k++;
+                    }
+                    break;
+
+                case "5":
+                    System.out.println("Selectati grupul:");
+                    k=1;
+                    for (Grup grup : currentUser.getAgenda().getListaGrup()){
+                        System.out.println(k+"."+grup.getNumeGrup());
+                        k++;
+                    }
+                    n = scanner.nextLine();
+                    Grup selectedGroup = currentUser.getAgenda().getListaGrup().get(Integer.parseInt(n) - 1);
+
+                    System.out.println("Selectati contactul:");
+                    for(k=0; k< currentUser.getAgenda().getListaContacte().size(); k++){
+                        System.out.println(k+"."+currentUser.getAgenda().getListaContacte().get(k).toString());
+                    }
+                    n = scanner.nextLine();
+                    selectedGroup.addContact(currentUser.getAgenda().getListaContacte().get(Integer.parseInt(n)));
+                    break;
+
+                case "6":
+                    System.out.println("Selectati grupul:");
+                    k=1;
+                    for (Grup grup : currentUser.getAgenda().getListaGrup()){
+                        System.out.println(k+"."+grup.getNumeGrup());
+                        k++;
+                    }
+                    n = scanner.nextLine();
+                    selectedGroup = currentUser.getAgenda().getListaGrup().get(Integer.parseInt(n) - 1);
+
+                    System.out.println("Selectati contactul:");
+                    for(k=0; k< selectedGroup.getContacte().size(); k++){
+                        System.out.println(k+"."+selectedGroup.getContacte().get(k).toString());
+                    }
+                    n = scanner.nextLine();
+                    Contact selectedContact = currentUser.getAgenda().getListaContacte().get(Integer.parseInt(n));
+                    selectedGroup.removeContact(selectedContact);
+                    break;
+
+                case "7":
+                    System.out.println("Numele grupului:");
+                    nume = scanner.nextLine();
+                    currentUser.getAgenda().addGrup(new Grup(nume));
+                    break;
+
+                case "8":
+                    System.out.println("Selectati grupul:");
+
+                    for(k=0; k< currentUser.getAgenda().getListaGrup().size(); k++){
+                        System.out.println(k+"."+currentUser.getAgenda().getListaGrup().get(k).getNumeGrup());
+                    }
+                    n = scanner.nextLine();
+                    currentUser.getAgenda().removeGrup(currentUser.getAgenda().getListaGrup().get(Integer.parseInt(n)));
                     break;
 
                 case "ADMIN":

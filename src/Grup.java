@@ -6,6 +6,7 @@ public class Grup {
 
     public Grup(String numeGrup) {
         this.numeGrup = numeGrup;
+        contacte = new ArrayList<>();
     }
 
     public String getNumeGrup() {
@@ -22,15 +23,17 @@ public class Grup {
 
     public void addContact(Contact contact) {
         contacte.add(contact);
+        contact.addToGroup(getNumeGrup());
     }
 
     public void removeContact(Contact contact) {
         contacte.remove(contact);
+        contact.removeFromGroup(getNumeGrup());
     }
 
     public void printContacts() {
         for (Contact contact : getContacte()) {
-            System.out.println(contact);
+            System.out.println("\t" + contact);
         }
     }
 }
