@@ -9,7 +9,7 @@ public class Main {
 
         while(true) {
 
-            System.out.println("Daca aveti un cont, va rugam introduceti 1. Daca doriti sa creati un cont, introduceti 0:");
+            System.out.println("0.Register\n1.Login");
             String n = scanner.nextLine();
 
             System.out.println("Username:");
@@ -42,7 +42,7 @@ public class Main {
             System.out.println("---Meniu---\n1.Vizualizati toate contactele\n2.Introduceti un contact nou\n3.Stergeti un contact" +
                     "\n4.Vizualizati toate grupurile si contactele din ele\n5.Adaugati un contact intr-un grup" +
                     "\n6.Stergeti un contact dintr-un grup\n7.Adaugati un grup nou\n8.Stergeti un grup\n" +
-                    "9.Cauta un contact\n0.Iesire");
+                    "9.Cauta un contact\n10.Modifica\n0.Iesire");
 
             if(currentUser.isAdmin()) {
                 System.out.println("ADMIN. Vizualizati operatiile de admin");
@@ -159,6 +159,57 @@ public class Main {
                         System.out.println(currentUser.getAgenda().searchContactNrTelefon(input));
                     else if(currentUser.getAgenda().searchContactEmail(input) != null)
                         System.out.println(currentUser.getAgenda().searchContactEmail(input));
+                    break;
+
+                case "10":
+                    System.out.println("1.Modifica un contact\n2.Modifica numele unui grup");
+                    n = scanner.nextLine();
+
+                    if(n.equals("2")){
+                        for(k=0; k< currentUser.getAgenda().getListaGrup().size(); k++){
+                            System.out.println(k+"."+currentUser.getAgenda().getListaGrup().get(k).getNumeGrup());
+                        }
+                        n = scanner.nextLine();
+                        selectedGroup = currentUser.getAgenda().getListaGrup().get(Integer.parseInt(n));
+
+                        System.out.println("Introduceti noul nume:");
+                        nume = scanner.nextLine();
+
+                        selectedGroup.setNumeGrup(nume);
+                        break;
+                    } else {
+                        System.out.println("Selectati contactul:");
+                        for(k=0; k< currentUser.getAgenda().getListaContacte().size(); k++){
+                            System.out.println(k+"."+currentUser.getAgenda().getListaContacte().get(k).toString());
+                        }
+                        n = scanner.nextLine();
+                        selectedContact = currentUser.getAgenda().getListaContacte().get(Integer.parseInt(n));
+                        System.out.println("1.Modifica nume\n2.Modifica numar de telefon\n3.Modifica email");
+                        n = scanner.nextLine();
+
+                        switch (n){
+                            case "1":
+                                System.out.println("Introduceti noul nume:");
+                                nume = scanner.nextLine();
+                                String[] splitName = nume.split(" ");
+                                selectedContact.setNume(splitName[0]);
+                                selectedContact.setPrenume(splitName[1]);
+                                break;
+
+                            case "2":
+                                System.out.println("Introduceti noul numar de telefon:");
+                                nume = scanner.nextLine();
+                                selectedContact.setNumarTelefon(nume);
+                                break;
+
+                            case "3":
+                                System.out.println("Introduceti noul email:");
+                                nume = scanner.nextLine();
+                                selectedContact.setEmail(nume);
+                                break;
+                        }
+                        currentUser.getAgenda().updateContacts();
+                    }
                     break;
 
                 case "ADMIN":

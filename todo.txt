@@ -1,11 +1,13 @@
 lucruri de facut (in versiunea asta, adica fara legatura cu baza de date, gui sau api, as spune ca e alpha):
 
 - admin user + ce privilegii are (done)
-- restul de functionalitati (grupuri, operatii cu ele)
+- restul de functionalitati (grupuri, operatii cu ele) (done)
+- adaugat optiune de modificare a unui contact/grup (done)
 - hashing passwords pentru securitate in plus
 - brainstorming de functionalitati extra (in caz in care cred ca nu am destule)
 - exceptii, verificari si constrangeri (exemplu: nr de telefon sa aiba 10 caractere, aruncat exceptii in cazul in care se introduce un contact care este deja prezent)
 - adaugat comentarii la tot!!!!!!!!!!
+- make code readable
 
 in urmatoarele versiuni:
 
