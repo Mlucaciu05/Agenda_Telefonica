@@ -41,7 +41,8 @@ public class Main {
         while(true) {
             System.out.println("---Meniu---\n1.Vizualizati toate contactele\n2.Introduceti un contact nou\n3.Stergeti un contact" +
                     "\n4.Vizualizati toate grupurile si contactele din ele\n5.Adaugati un contact intr-un grup" +
-                    "\n6.Stergeti un contact dintr-un grup\n7.Adaugati un grup nou\n8.Stergeti un grup\n0.Iesire");
+                    "\n6.Stergeti un contact dintr-un grup\n7.Adaugati un grup nou\n8.Stergeti un grup\n" +
+                    "9.Cauta un contact\n0.Iesire");
 
             if(currentUser.isAdmin()) {
                 System.out.println("ADMIN. Vizualizati operatiile de admin");
@@ -144,6 +145,20 @@ public class Main {
                     }
                     n = scanner.nextLine();
                     currentUser.getAgenda().removeGrup(currentUser.getAgenda().getListaGrup().get(Integer.parseInt(n)));
+                    break;
+
+                case "9":
+                    System.out.println("Introduceti numele/ numarul de telefon/ email-ul:");
+                    String input = scanner.nextLine();
+
+                    if(currentUser.getAgenda().searchContactNume(input) != null)
+                        for(Contact contact : currentUser.getAgenda().searchContactNume(input)){
+                            System.out.println(contact);
+                        }
+                    else if(currentUser.getAgenda().searchContactNrTelefon(input) != null)
+                        System.out.println(currentUser.getAgenda().searchContactNrTelefon(input));
+                    else if(currentUser.getAgenda().searchContactEmail(input) != null)
+                        System.out.println(currentUser.getAgenda().searchContactEmail(input));
                     break;
 
                 case "ADMIN":

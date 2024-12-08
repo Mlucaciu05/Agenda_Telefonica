@@ -75,24 +75,19 @@ public class Agenda {
         }
     }
 
-    public ArrayList<Contact> searchContactNrTelefon(String nrTel) {
-        ArrayList<Contact> contactList = new ArrayList<>();
+    public Contact searchContactNrTelefon(String nrTel) {
         for (Contact contact : getListaContacte()) {
             if (contact.getNumarTelefon().equals(nrTel)) {
-                contactList.add(contact);
+                return contact;
             }
         }
-        if(contactList.isEmpty()){
-            return null;
-        } else {
-            return contactList;
-        }
+        return null;
     }
 
-    public ArrayList<Contact> searchContactGrup(String numeGrup) {
-        for (Grup grup : getListaGrup()) {
-            if (grup.getNumeGrup().equals(numeGrup)) {
-                return grup.getContacte();
+    public Contact searchContactEmail(String email) {
+        for (Contact contact : getListaContacte()) {
+            if (contact.getEmail().equals(email)) {
+                return contact;
             }
         }
         return null;
