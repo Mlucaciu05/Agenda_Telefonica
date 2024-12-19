@@ -1,3 +1,5 @@
+package main;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -32,17 +34,21 @@ public class Main {
 
     }
 
+    /**
+     * @param currentUser Utilizatorul curent, folosit pentru operatii asupra agendei
+     *                    Metoda pentru a afisa meniul principal (va fi schimbat in urmatoarele versiuni) si pentru a accesa operatii asupra agendei
+     */
     public static void Meniu(User currentUser) {
         String nume;
         Scanner scanner = new Scanner(System.in);
-        Integer k=1;
+        int k=1;
         String n;
 
         while(true) {
             System.out.println("---Meniu---\n1.Vizualizati toate contactele\n2.Introduceti un contact nou\n3.Stergeti un contact" +
                     "\n4.Vizualizati toate grupurile si contactele din ele\n5.Adaugati un contact intr-un grup" +
                     "\n6.Stergeti un contact dintr-un grup\n7.Adaugati un grup nou\n8.Stergeti un grup\n" +
-                    "9.Cauta un contact\n10.Modifica\n0.Iesire");
+                    "9.Cauta un contact\n10.Modifica un contact\n0.Iesire");
 
             if(currentUser.isAdmin()) {
                 System.out.println("ADMIN. Vizualizati operatiile de admin");
@@ -226,6 +232,29 @@ public class Main {
         }
     }
 
+    public void viewAllContacts() {}
+
+    public static void addNewContact() {}
+
+    public static void deleteContact() {}
+
+    public static void viewAllGroups() {}
+
+    public static void addToGroup(){}
+
+    public static void removeFromGroup(){}
+
+    public static void addNewGroup() {}
+
+    public static void deleteGroup() {}
+
+    public static void searchContact(){}
+
+    public static void modifyContact(){}
+
+    /**
+     * Meniu pentru operatiile specifice doar utilizatorilor cu drept de admin
+     */
     public static void MeniuAdmin() {
         Scanner scanner = new Scanner(System.in);
         UserManager userManager = new UserManager();
@@ -290,5 +319,12 @@ public class Main {
             }
         }
     }
+    public static void viewAllUsers(){}
+
+    public static void addUser(){}
+
+    public static void removeUser(){}
+
+    public static void changePrivilege(){}
 
 }

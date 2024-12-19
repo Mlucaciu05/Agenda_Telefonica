@@ -1,3 +1,5 @@
+package main;
+
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.LineNumberReader;
@@ -8,6 +10,10 @@ public class Agenda {
     private ArrayList<Contact> listaContacte;
     private ArrayList<Grup> listaGrup;
 
+    /**
+     * Constructor pentru clasa main.Agenda; citeste contactele din fisierul agenda.txt si le adauga in lista de contacte; de asemenea initializeaza
+     * grupul "Favorite"
+     */
     public Agenda() {
         try {
             FileReader fr = new FileReader(FILENAME);
@@ -56,6 +62,11 @@ public class Agenda {
         listaGrup.remove(grup);
     }
 
+    /**
+     * @param nume Numele contactului care este cautat
+     *             Aceasta functie cauta un contact dupa nume. Numele introdus de utilizator este potrivit cu numele, prenumele sau doar o parte din acesta
+     * @return lista de contacte care se potrivesc cu numele introdus de utilizator, sau null daca nu exista niciun contact care se potriveste
+     */
     public ArrayList<Contact> searchContactNume(String nume) {
         ArrayList<Contact> contactList = new ArrayList<>();
         nume = nume.toLowerCase();
@@ -75,6 +86,11 @@ public class Agenda {
         }
     }
 
+    /**
+     * @param nrTel Numarul de telefon al contactului care este cautat
+     *              Aceasta metoda cauta un contact dupa un numar de telefon
+     * @return Obiectul de tip main.Contact cu numarul de telefon introdus, sau null daca nu exista
+     */
     public Contact searchContactNrTelefon(String nrTel) {
         for (Contact contact : getListaContacte()) {
             if (contact.getNumarTelefon().equals(nrTel)) {
@@ -84,6 +100,11 @@ public class Agenda {
         return null;
     }
 
+    /**
+     * @param email Emailul contactului care este cautat
+     *              Aceasta metoda cauta un contact dupa o adresa de email introdusa de utilizator
+     * @return Obiectul de tip main.Contact cu adresa de email introdusa, sau null daca nu exista
+     */
     public Contact searchContactEmail(String email) {
         for (Contact contact : getListaContacte()) {
             if (contact.getEmail().equals(email)) {
@@ -100,6 +121,9 @@ public class Agenda {
         }
     }
 
+    /**
+     * Metoda auxoiliara care actualizeaza fisierul agenda.txt
+     */
     public void updateContacts(){
         try {
             FileWriter fw = new FileWriter(FILENAME);

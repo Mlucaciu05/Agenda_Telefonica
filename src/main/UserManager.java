@@ -1,13 +1,22 @@
+package main;
+
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
 
+/**
+ * Clasa care administreaza utilizatori
+ */
 public class UserManager {
     private static final String FILENAME = "users.txt";
     private static User currentUser = null;
     private ArrayList<User> users;
 
+    /**
+     * Constructor pentru clasa
+     * Citeste utilizatori din users.txt si initializeaza un obiect de tip main.Agenda pentru fiecare
+     */
     public UserManager() {
         users = new ArrayList<>();
         try {
@@ -28,6 +37,10 @@ public class UserManager {
 
     }
 
+    public ArrayList<User> getUsers() {
+        return users;
+    }
+
     public User getCurrentUser() {
         return currentUser;
     }
@@ -44,6 +57,10 @@ public class UserManager {
         }
     }
 
+    /**
+     * @param username Username-ul unui utilizator
+     * @return Obiect de tip main.User pentru un username gasit, sau null daca nu exista
+     */
     public User searchUser(String username){
         for(User user : users){
             if(user.getUsername().equals(username)){
@@ -53,6 +70,12 @@ public class UserManager {
         return null;
     }
 
+    /**
+     * @param username Username-ul unui utilizator
+     * @param password Parola pentru contul respectiv
+     * @return true, daca username-ul si parola convin, false in caz contrar
+     * Daca username-ul si parola sunt corecte, currentUser este setat la utilizatorul corespunzator
+     */
     public boolean login(String username, String password){
         for(User user : users){
             if(user.getUsername().equals(username) && user.getPassword().equals(password)){
@@ -63,6 +86,11 @@ public class UserManager {
         return false;
     }
 
+    /**
+     * @param username Username-ul unui utilizator
+     * @param password Parola contului
+     *                 Metoda inregistreaza un utilizator nou si salveaza username-ul si parola in users.txt
+     */
     public void register(String username, String password){
         try {
             FileWriter fw = new FileWriter(FILENAME, true);
@@ -84,6 +112,9 @@ public class UserManager {
         }
     }
 
+    /**
+     * Metoda auxiliara care actualizeaza users.txt
+     */
     public void updateUserList(){
         try{
             FileWriter fw = new FileWriter(FILENAME);

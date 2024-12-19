@@ -1,9 +1,17 @@
+package main;
+
 public class User {
     private String username;
     private String password;
     private Agenda agenda;
     private String role;
 
+    /**
+     * @param nume Username-ul
+     * @param password Parola
+     * @param agenda Obiect de tip main.Agenda, unde sunt stocate contactele
+     *               Constructor pentru clasa main.User
+     */
     public User(String nume, String password, Agenda agenda) {
         this.username = nume;
         this.password = password;
@@ -30,10 +38,19 @@ public class User {
         this.role = role;
     }
 
+    public String getRole() {
+        return role;
+    }
+
     public boolean isAdmin() {
         return role.equals("ADMIN");
     }
 
+    /**
+     * @param oldPassword Parola veche
+     * @param newPassword Parola noua
+     *                    Aceasta metoda schimba parola veche a unui user cu o parola noua (functionaloitatea nu este implementata deocamdata)
+     */
     public void setNewPassword(String oldPassword, String newPassword) {
         if (oldPassword.equals(this.password)) {
             this.password = newPassword;
