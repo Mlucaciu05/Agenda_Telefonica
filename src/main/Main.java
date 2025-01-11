@@ -2,12 +2,21 @@ package main;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import GUI.*;
 
 public class Main {
+
     public static void main(String[] args) {
 
-        UserManager userManager = new UserManager();
+        new LoginScreen();
+
+        //Main app = new Main();
+
+    }
+
+    public void Main(){
         Scanner scanner = new Scanner(System.in);
+        UserManager userManager = new UserManager();
 
         while(true) {
 
@@ -31,7 +40,6 @@ public class Main {
                 }
             }
         }
-
     }
 
     /**
@@ -232,26 +240,6 @@ public class Main {
         }
     }
 
-    public void viewAllContacts() {}
-
-    public static void addNewContact() {}
-
-    public static void deleteContact() {}
-
-    public static void viewAllGroups() {}
-
-    public static void addToGroup(){}
-
-    public static void removeFromGroup(){}
-
-    public static void addNewGroup() {}
-
-    public static void deleteGroup() {}
-
-    public static void searchContact(){}
-
-    public static void modifyContact(){}
-
     /**
      * Meniu pentru operatiile specifice doar utilizatorilor cu drept de admin
      */
@@ -319,12 +307,5 @@ public class Main {
             }
         }
     }
-    public static void viewAllUsers(){}
-
-    public static void addUser(){}
-
-    public static void removeUser(){}
-
-    public static void changePrivilege(){}
 
 }

@@ -3,7 +3,7 @@ package main;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Contact {
+public class Contact implements Comparable<Contact>{
 
     private String nume;
     private String prenume;
@@ -71,6 +71,13 @@ public class Contact {
         grupuri.remove(grup);
     }
 
+    public void modifcaContact(String nume, String prenume, String numarTelefon, String email) {
+        this.nume = nume;
+        this.prenume = prenume;
+        this.numarTelefon = numarTelefon;
+        this.email = email;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -86,7 +93,11 @@ public class Contact {
 
     @Override
     public String toString() {
-        return nume + " " + prenume + " " + numarTelefon + " " + email + " Grupuri: " + grupuri;
+        return nume + " " + prenume + " " + numarTelefon;
     }
 
+    @Override
+    public int compareTo(Contact o) {
+        return this.nume.compareTo(o.getNume());
+    }
 }

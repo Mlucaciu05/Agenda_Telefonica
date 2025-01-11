@@ -1,4 +1,3 @@
-AANNAA,maria,0000000000,a@email.com
-Matei,Matei,0765432190,mateimatei@email.com
-Dana,Ana,1234567890,danaana@email.com
-Amadeus,Mozart,0999999999,amadeusmozart@email.com
+Antonia,Stan,07n-amcartela,antonia@email.com
+Balosin,Andreaa Matiz,0123456789,matiz@email.com
+Dana,Ana maria,1234567890,danaana@email.com

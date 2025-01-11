@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Grup {
     private String numeGrup;
@@ -37,5 +38,22 @@ public class Grup {
         for (Contact contact : getContacte()) {
             System.out.println("\t" + contact);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Grup grup = (Grup) o;
+        return Objects.equals(numeGrup, grup.numeGrup);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(numeGrup);
+    }
+
+    public String toString() {
+        return numeGrup;
     }
 }

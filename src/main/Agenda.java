@@ -4,6 +4,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class Agenda {
     private static final String FILENAME = "agenda.txt";
@@ -28,6 +30,7 @@ public class Agenda {
                 String[] parts = line.split(",");
                 listaContacte.add(new Contact(parts[0], parts[1], parts[2], parts[3]));
             }
+            Collections.sort(listaContacte);
 
             lnr.close();
             fr.close();
@@ -46,11 +49,13 @@ public class Agenda {
 
     public void addContact(Contact contact) {
         listaContacte.add(contact);
+        Collections.sort(listaContacte);
         updateContacts();
     }
 
     public void removeContact(Contact contact) {
         listaContacte.remove(contact);
+        Collections.sort(listaContacte);
         updateContacts();
     }
 
@@ -60,6 +65,11 @@ public class Agenda {
 
     public void removeGrup(Grup grup) {
         listaGrup.remove(grup);
+        for(Contact c : listaContacte) {
+            if(c.getGrupuri().contains(grup.getNumeGrup())) {
+                c.removeFromGroup(grup.getNumeGrup());
+            }
+        }
     }
 
     /**
@@ -111,6 +121,25 @@ public class Agenda {
                 return contact;
             }
         }
+        return null;
+    }
+
+    public ArrayList<Contact> search(String string){
+        ArrayList<Contact> contactList = new ArrayList<>();
+
+        if(searchContactNume(string)!=null){
+            contactList = searchContactNume(string);
+            return contactList;
+
+        } else if(searchContactNrTelefon(string)!=null){
+            contactList.add(searchContactNrTelefon(string));
+            return contactList;
+
+        } else if(searchContactEmail(string)!=null){
+            contactList.add(searchContactEmail(string));
+            return contactList;
+        }
+
         return null;
     }
 
