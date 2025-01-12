@@ -50,7 +50,7 @@ public class MainScreen extends JFrame {
                     if (nrTel != null) {
                         String email = JOptionPane.showInputDialog(MainScreen.this,"Introduceti email:","Adauga contact",JOptionPane.PLAIN_MESSAGE);
                         if (email != null) {
-                            currentUser.getAgenda().addContact(new Contact(nume,prenume,nrTel,email));
+                            currentUser.getAgenda().addContact(nume, prenume, nrTel, email, currentUser.getId());
                         }
                     }
                 }
@@ -86,8 +86,7 @@ public class MainScreen extends JFrame {
             String groupName = JOptionPane.showInputDialog(MainScreen.this, "Introduceti numele noului grup:", "Adauga Grup", JOptionPane.PLAIN_MESSAGE);
 
             if (groupName != null && !groupName.isEmpty()) {
-                Grup newGrup = new Grup(groupName);
-                currentUser.getAgenda().addGrup(newGrup);
+                currentUser.getAgenda().addGrup(groupName);
                 updateGroupComboBox(comboBox1, currentUser);
 
             }
@@ -135,8 +134,9 @@ public class MainScreen extends JFrame {
         model.clear();
 
         for(Contact c : currentUser.getAgenda().getListaContacte())
-            if(c.getGrupuri().contains(grup))
-                model.addElement(c);
+            for(Grup g : c.getGrupuri())
+                if(g.getNumeGrup().equals(grup))
+                    model.addElement(c);
 
         list1.setModel(model);
     }
@@ -144,7 +144,7 @@ public class MainScreen extends JFrame {
     public void updateGroupComboBox(JComboBox<Grup> comboBox, User currentUser) {
         DefaultComboBoxModel<Grup> model = (DefaultComboBoxModel<Grup>) comboBox.getModel();
         model.removeAllElements();
-        model.addElement(new Grup("Toate grupurile"));
+        model.addElement(new Grup(0,"Toate grupurile"));
 
         for (Grup g : currentUser.getAgenda().getListaGrup()) {
             model.addElement(g);

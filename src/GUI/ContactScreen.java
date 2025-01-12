@@ -13,7 +13,7 @@ public class ContactScreen extends JFrame {
     private JTextField nrTelefonTextField;
     private JTextField emailTextField;
     private JButton modificaButton;
-    private JList<String> list1;
+    private JList<Grup> list1;
     private JButton adaugaIntrUnGrupButton;
     private JButton scoateDintrUnGrupButton;
 
@@ -37,7 +37,7 @@ public class ContactScreen extends JFrame {
         nrTelefonTextField.setText(contact.getNumarTelefon());
         emailTextField.setText(contact.getEmail());
 
-        DefaultListModel<String> model = new DefaultListModel<>();
+        DefaultListModel<Grup> model = new DefaultListModel<>();
         updateGrupList(model, contact);
         list1.setModel(model);
 
@@ -57,11 +57,9 @@ public class ContactScreen extends JFrame {
                 String telefon = nrTelefonTextField.getText();
                 String email = emailTextField.getText();
 
-                if(prenume != null) {
-                    contact.modifcaContact(nume, prenume, telefon, email);
-                    currentUser.getAgenda().updateContacts();
-                    dispose();
-                }
+                contact.modifcaContact(nume, prenume, telefon, email);
+                //currentUser.getAgenda().updateContacts();
+                dispose();
 
             }
         });
@@ -85,25 +83,25 @@ public class ContactScreen extends JFrame {
 
             if (selectedGrup != null) {
                 if(!contact.getGrupuri().contains(selectedGrup.getNumeGrup()))
-                    contact.addToGroup(selectedGrup.getNumeGrup());
+                    contact.addToGroup(selectedGrup.getId());
                 updateGrupList(model, contact);
             }
 
         });
 
         scoateDintrUnGrupButton.addActionListener(e -> {
-            String selectedItem = list1.getSelectedValue();
-            if (selectedItem != null) {
-                contact.getGrupuri().remove(selectedItem);
+            Grup selectedGrup = list1.getSelectedValue();
+            if (selectedGrup != null) {
+                contact.removeFromGroup(selectedGrup.getId());
                 updateGrupList(model, contact);
             }
         });
 
     }
 
-    public void updateGrupList(DefaultListModel<String> model, Contact contact) {
+    public void updateGrupList(DefaultListModel<Grup> model, Contact contact) {
         model.clear();
-        for(String g : contact.getGrupuri())
+        for(Grup g : contact.getGrupuri())
             model.addElement(g);
     }
 }

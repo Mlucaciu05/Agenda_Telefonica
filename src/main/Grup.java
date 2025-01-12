@@ -2,42 +2,31 @@ package main;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.sql.*;
 
 public class Grup {
+    private final int id;
     private String numeGrup;
-    private ArrayList<Contact> contacte;
 
-    public Grup(String numeGrup) {
+    public Grup(int id, String numeGrup) {
+        this.id = id;
         this.numeGrup = numeGrup;
-        contacte = new ArrayList<>();
+    }
+
+    public int getId(){
+        return id;
     }
 
     public String getNumeGrup() {
         return numeGrup;
     }
 
-    public void setNumeGrup(String numeGrup) {
-        this.numeGrup = numeGrup;
-    }
-
-    public ArrayList<Contact> getContacte() {
-        return contacte;
-    }
-
     public void addContact(Contact contact) {
-        contacte.add(contact);
-        contact.addToGroup(getNumeGrup());
+        contact.addToGroup(id);
     }
 
     public void removeContact(Contact contact) {
-        contacte.remove(contact);
-        contact.removeFromGroup(getNumeGrup());
-    }
-
-    public void printContacts() {
-        for (Contact contact : getContacte()) {
-            System.out.println("\t" + contact);
-        }
+        contact.removeFromGroup(id);
     }
 
     @Override

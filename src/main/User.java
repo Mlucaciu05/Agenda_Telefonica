@@ -1,6 +1,10 @@
 package main;
 
+import java.sql.*;
+
 public class User {
+
+    private int id;
     private String username;
     private String password;
     private Agenda agenda;
@@ -12,22 +16,24 @@ public class User {
      * @param agenda Obiect de tip main.Agenda, unde sunt stocate contactele
      *               Constructor pentru clasa main.User
      */
-    public User(String nume, String password, Agenda agenda) {
+    public User(int id, String nume, String password, String role, Agenda agenda) {
+        this.id = id;
         this.username = nume;
         this.password = password;
         this.agenda = agenda;
-        role = "USER";
+        this.role = role;
+    }
 
-        if(nume.equals("admin"))
-            role = "ADMIN";
+    public int getId() {
+        return id;
     }
 
     public String getUsername() {
         return username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getRole() {
+        return role;
     }
 
     public Agenda getAgenda() {
@@ -36,30 +42,23 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
-    }
 
-    public String getRole() {
-        return role;
+        String sql = "UPDATE users SET role = ? WHERE user_id = ?";
+
+        try(Connection connection = DBConnection.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql)){
+
+            statement.setString(1, role);
+            statement.setInt(2, id);
+            statement.execute();
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 
     public boolean isAdmin() {
         return role.equals("ADMIN");
-    }
-
-    /**
-     * @param oldPassword Parola veche
-     * @param newPassword Parola noua
-     *                    Aceasta metoda schimba parola veche a unui user cu o parola noua (functionaloitatea nu este implementata deocamdata)
-     */
-    public void setNewPassword(String oldPassword, String newPassword) {
-        if (oldPassword.equals(this.password)) {
-            this.password = newPassword;
-        }
-    }
-
-    public void printData(){
-        System.out.println(username);
-        agenda.printContactList();
     }
 
     @Override

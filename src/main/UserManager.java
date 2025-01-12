@@ -4,12 +4,13 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.LineNumberReader;
 import java.util.ArrayList;
+import java.sql.*;
 
 /**
  * Clasa care administreaza utilizatori
  */
 public class UserManager {
-    private static final String FILENAME = "users.txt";
+
     private static User currentUser = null;
     private ArrayList<User> users;
 
@@ -19,22 +20,17 @@ public class UserManager {
      */
     public UserManager() {
         users = new ArrayList<>();
-        try {
-            FileReader fr = new FileReader(FILENAME);
-            LineNumberReader lnr = new LineNumberReader(fr);
 
-            while (lnr.ready()) {
-                String line = lnr.readLine();
-                String[] parts = line.split(",");
-                users.add(new User(parts[0], parts[1], new Agenda()));
+        updateUsersList();
+    }
+
+    public User findUser(int id) {
+        for(User user : users) {
+            if(user.getId() == id) {
+                return user;
             }
-
-            lnr.close();
-            fr.close();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-
+        return null;
     }
 
     public ArrayList<User> getUsers() {
@@ -45,29 +41,20 @@ public class UserManager {
         return currentUser;
     }
 
-    public void addUser(User user){
-        users.add(user);
-        updateUserList();
-    }
+    public void removeUser(int id){
+        String sql = "DELETE FROM users WHERE user_id = ?";
 
-    public void removeUser(User user){
-        if (currentUser.isAdmin()){
-            users.remove(user);
-            updateUserList();
-        }
-    }
+        try(Connection connection = DBConnection.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql)){
 
-    /**
-     * @param username Username-ul unui utilizator
-     * @return Obiect de tip main.User pentru un username gasit, sau null daca nu exista
-     */
-    public User searchUser(String username){
-        for(User user : users){
-            if(user.getUsername().equals(username)){
-                return user;
-            }
+            statement.setInt(1, id);
+            statement.executeUpdate();
+
+        }catch (SQLException e){
+            e.printStackTrace();
         }
-        return null;
+
+        users.remove(findUser(id));
     }
 
     /**
@@ -77,11 +64,22 @@ public class UserManager {
      * Daca username-ul si parola sunt corecte, currentUser este setat la utilizatorul corespunzator
      */
     public boolean login(String username, String password){
-        for(User user : users){
-            if(user.getUsername().equals(username) && user.getPassword().equals(password)){
-                currentUser = user;
+        String sql = "SELECT user_id FROM users WHERE username = ? AND password = ?";
+
+        try(Connection connection = DBConnection.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql)){
+
+            statement.setString(1, username);
+            statement.setString(2, password);
+            ResultSet rs = statement.executeQuery();
+
+            if(rs.next()) {
+                int id = rs.getInt("user_id");
+                currentUser = findUser(id);
                 return true;
             }
+        }catch (SQLException e){
+            e.printStackTrace();
         }
         return false;
     }
@@ -92,38 +90,43 @@ public class UserManager {
      *                 Metoda inregistreaza un utilizator nou si salveaza username-ul si parola in users.txt
      */
     public void register(String username, String password){
-        try {
-            FileWriter fw = new FileWriter(FILENAME, true);
-            System.out.println(username + " " + password);
-            fw.write(username + "," + password + "\n");
+        String sql = "INSERT INTO users(user_id,username,password,role) VALUES(users_seq.NEXTVAL,?,?,?)";
 
-            fw.close();
+        try(Connection connection = DBConnection.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql)){
 
-            addUser(new User(username, password, new Agenda()));
-        } catch(Exception e){
+            statement.setString(1, username);
+            statement.setString(2, password);
+            statement.setString(3, "USER");
+            statement.executeUpdate();
+
+        }catch (SQLException e){
             e.printStackTrace();
         }
+
+        updateUsersList();
+
     }
 
-    public void printUsers(){
-        for(User user : users){
-            //also sort this one
-            System.out.println(user);
-        }
-    }
+    public void updateUsersList(){
+        users.clear();
 
-    /**
-     * Metoda auxiliara care actualizeaza users.txt
-     */
-    public void updateUserList(){
-        try{
-            FileWriter fw = new FileWriter(FILENAME);
-            for(User user : users){
-                fw.write(user.getUsername() + "," + user.getPassword() + "\n");
+        String sql = "SELECT * FROM users";
+
+        try(Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)){
+
+            ResultSet rs = statement.executeQuery(sql);
+            while(rs.next()) {
+                int id = rs.getInt("user_id");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                String role = rs.getString("role");
+
+                users.add(new User(id,username,password,role, new Agenda(id)));
             }
-            fw.close();
 
-        } catch (Exception e){
+        }catch (SQLException e){
             e.printStackTrace();
         }
     }

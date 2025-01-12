@@ -11,14 +11,14 @@ class UserTest {
 
     @Test
     void setRole() {
-        user = new User("test","test",new Agenda());
+        user = new User(1,"test","test","USER" ,new Agenda(1));
         user.setRole("ADMIN");
         assertEquals("ADMIN", user.getRole());
     }
 
     @Test
     void isAdmin() {
-        user = new User("test","test",new Agenda());
+        user = new User(1,"test","test", "USER", new Agenda(1));
         user.setRole("ADMIN");
         assertTrue(user.isAdmin());
     }

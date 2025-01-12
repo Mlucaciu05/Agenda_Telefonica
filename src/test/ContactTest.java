@@ -3,7 +3,6 @@ package test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import main.Contact;
-import org.junit.jupiter.api.Test;
 
 class ContactTest {
 
@@ -11,16 +10,16 @@ class ContactTest {
 
     @org.junit.jupiter.api.Test
     void addToGroup() {
-        contact = new Contact("test","test","test","test");
-        contact.addToGroup("test");
+        contact = new Contact(1, "test", "test", "test", "test");
+        contact.addToGroup(1);
         assertTrue(contact.getGrupuri().contains("test"));
     }
 
     @org.junit.jupiter.api.Test
     void removeFromGroup() {
-        contact = new Contact("test","test","test","test");
-        contact.addToGroup("test");
-        contact.removeFromGroup("test");
+        contact = new Contact(1, "test", "test", "test", "test");
+        contact.addToGroup(1);
+        contact.removeFromGroup(1);
         assertFalse(contact.getGrupuri().contains("test"));
     }
 }

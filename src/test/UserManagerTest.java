@@ -10,31 +10,17 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserManagerTest {
     UserManager userManager = new UserManager();
 
-    @Test
-    void addUser() {
-        User user = new User("test","test", new Agenda());
-        userManager.addUser(user);
-        assertTrue(userManager.getUsers().contains(user));
-    }
 
     @Test
     void removeUser() {
-        User user = new User("test","test", new Agenda());
-        userManager.removeUser(user);
+        User user = new User(1,"test","test","USER" ,new Agenda(1));
+        userManager.removeUser(user.getId());
         assertFalse(userManager.getUsers().contains(user));
     }
 
     @Test
-    void searchUser() {
-        User user = new User("test","test", new Agenda());
-        userManager.addUser(user);
-        assertEquals(userManager.searchUser("test"), user);
-    }
-
-    @Test
     void login() {
-        User user = new User("test","test", new Agenda());
-        userManager.addUser(user);
+        User user = new User(1,"test","test", "USER" ,new Agenda(1));
         assertTrue(userManager.login("test","test"));
     }
 

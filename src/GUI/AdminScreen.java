@@ -29,7 +29,7 @@ public class AdminScreen extends JFrame {
         deleteButton.addActionListener(e -> {
             User selectedUser = list1.getSelectedValue();
             if (selectedUser != null) {
-                userManager.removeUser(selectedUser);
+                userManager.removeUser(selectedUser.getId());
             }
             updateUsersList(model, userManager);
         });

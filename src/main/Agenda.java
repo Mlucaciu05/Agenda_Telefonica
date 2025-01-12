@@ -1,14 +1,12 @@
 package main;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.LineNumberReader;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
+import java.sql.*;
 
 public class Agenda {
-    private static final String FILENAME = "agenda.txt";
+
+    private int userId;
     private ArrayList<Contact> listaContacte;
     private ArrayList<Grup> listaGrup;
 
@@ -16,27 +14,13 @@ public class Agenda {
      * Constructor pentru clasa main.Agenda; citeste contactele din fisierul agenda.txt si le adauga in lista de contacte; de asemenea initializeaza
      * grupul "Favorite"
      */
-    public Agenda() {
-        try {
-            FileReader fr = new FileReader(FILENAME);
-            LineNumberReader lnr = new LineNumberReader(fr);
-            listaContacte = new ArrayList<>();
+    public Agenda(int userId) {
+        this.userId = userId;
+        listaContacte = new ArrayList<>();
+        listaGrup = new ArrayList<>();
 
-            listaGrup = new ArrayList<>();
-            listaGrup.add(new Grup("Favorite"));
-
-            while(lnr.ready()) {
-                String line = lnr.readLine();
-                String[] parts = line.split(",");
-                listaContacte.add(new Contact(parts[0], parts[1], parts[2], parts[3]));
-            }
-            Collections.sort(listaContacte);
-
-            lnr.close();
-            fr.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        updateListaContacte();
+        updateListaGrup();
     }
 
     public ArrayList<Contact> getListaContacte() {
@@ -48,28 +32,117 @@ public class Agenda {
     }
 
     public void addContact(Contact contact) {
+        String sql = "INSERT INTO contacte (contact_id, nume, prenume, nr_tel, email, user_id) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
+
+        try(Connection connection = DBConnection.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, contact.getId());
+            statement.setString(2, contact.getNume());
+            statement.setString(3, contact.getPrenume());
+            statement.setString(4, contact.getNumarTelefon());
+            statement.setString(5, contact.getEmail());
+            statement.setInt(6, userId);
+            statement.executeUpdate();
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+
         listaContacte.add(contact);
         Collections.sort(listaContacte);
-        updateContacts();
+    }
+
+    public void addContact(String nume, String prenume, String numarTelefon, String email, int userId) {
+        String sql = "INSERT INTO contacte (contact_id, nume, prenume, nr_tel, email, user_id) " +
+                "VALUES (contacte_seq.NEXTVAL, ?, ?, ?, ?, ?)";
+
+        try(Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, nume);
+            statement.setString(2, prenume);
+            statement.setString(3, numarTelefon);
+            statement.setString(4, email);
+            statement.setInt(5, userId);
+            statement.executeUpdate();
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        updateListaContacte();
+        Collections.sort(listaContacte);
     }
 
     public void removeContact(Contact contact) {
-        listaContacte.remove(contact);
+
+        String sql = "DELETE FROM contacte WHERE contact_id = ?";
+
+        try(Connection connection = DBConnection.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql)){
+
+            statement.setInt(1, contact.getId());
+            statement.executeUpdate();
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        updateListaContacte();
         Collections.sort(listaContacte);
-        updateContacts();
     }
 
     public void addGrup(Grup grup) {
-        listaGrup.add(grup);
+        String sql = "INSERT INTO grupuri (grup_id, user_id, nume) VALUES (?, ?, ?)";
+
+        try(Connection connection = DBConnection.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, grup.getId());
+            statement.setInt(2, userId);
+            statement.setString(3, grup.getNumeGrup());
+            statement.executeUpdate();
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        updateListaGrup();
+    }
+
+    public void addGrup(String nume) {
+        String sql = "INSERT INTO grupuri (grup_id, user_id, nume) VALUES (grup_seq.NEXTVAL, ?, ?)";
+
+        try(Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, userId);
+            statement.setString(2, nume);
+            statement.executeUpdate();
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        updateListaGrup();
     }
 
     public void removeGrup(Grup grup) {
-        listaGrup.remove(grup);
-        for(Contact c : listaContacte) {
-            if(c.getGrupuri().contains(grup.getNumeGrup())) {
-                c.removeFromGroup(grup.getNumeGrup());
-            }
+        String sql = "DELETE FROM grupuri WHERE grup_id = ?";
+
+        try(Connection connection = DBConnection.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql)){
+
+            statement.setInt(1, grup.getId());
+            statement.executeUpdate();
+
+        }catch (SQLException e){
+            e.printStackTrace();
         }
+
+        listaGrup.remove(grup);
     }
 
     /**
@@ -143,25 +216,53 @@ public class Agenda {
         return null;
     }
 
-    public void printContactList() {
-        for (Contact contact : getListaContacte()) {
-            //d not forget to sort this shit
-            System.out.println(contact);
-        }
-    }
+    public void updateListaContacte(){
+        listaContacte.clear();
 
-    /**
-     * Metoda auxoiliara care actualizeaza fisierul agenda.txt
-     */
-    public void updateContacts(){
-        try {
-            FileWriter fw = new FileWriter(FILENAME);
-            for(Contact contact : getListaContacte()){
-                fw.write(contact.getNume() + "," + contact.getPrenume() + "," + contact.getNumarTelefon() + "," + contact.getEmail() + "\n");
+        String sql = "SELECT * FROM contacte WHERE user_id = ?";
+
+        try(Connection connection = DBConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)){
+
+            statement.setInt(1, userId);
+            ResultSet rs = statement.executeQuery();
+
+            while(rs.next()) {
+                int id = rs.getInt("contact_id");
+                String nume = rs.getString("nume");
+                String prenume = rs.getString("prenume");
+                String tel = rs.getString("nr_tel");
+                String email = rs.getString("email");
+
+                listaContacte.add(new Contact(id, nume, prenume, tel, email));
             }
-            fw.close();
-        } catch (Exception e){
+
+        }catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    public void updateListaGrup(){
+        listaGrup.clear();
+
+        String sql2 = "SELECT * FROM grupuri WHERE user_id = ?";
+
+        try(Connection connection = DBConnection.getConnection();
+            PreparedStatement statement2 = connection.prepareStatement(sql2)){
+
+            statement2.setInt(1,userId);
+            ResultSet rs2 = statement2.executeQuery();
+
+            while(rs2.next()) {
+                int id = rs2.getInt("grup_id");
+                String nume = rs2.getString("nume");
+
+                listaGrup.add(new Grup(id, nume));
+            }
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
